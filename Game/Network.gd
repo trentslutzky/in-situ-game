@@ -10,6 +10,8 @@ var players = {}
 
 var local_unique_id = -1
 
+var synced_placeables = {}
+
 func _ready():
 	var ip_addresses = IP.get_local_addresses()
 	for ip in ip_addresses:
@@ -57,5 +59,13 @@ func ready_up():
 func request_game_start():
 	rpc_id(1,"request_game_start")
 	
+func request_placeable(placeable_id,pos):
+	rpc_id(1,"request_placeable",placeable_id,pos)
+	
 remote func start_game():
 	get_tree().change_scene("res://Maps/TestMap.tscn")
+	
+remote func server_placeable(placeable_info,new_synced_placeables):
+	synced_placeables = new_synced_placeables
+	print("sever_placeable")
+	get_node("/root/Map").remote_placeable(placeable_info)

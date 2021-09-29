@@ -6,6 +6,9 @@ var DEFAULT_MAX_PLAYERS = 4
 
 var players = {}
 
+var synced_placeables = {}
+var synced_placeables_index = 0
+
 func _ready():
 	var ip_addresses = IP.get_local_addresses()
 	for ip in ip_addresses:
@@ -65,3 +68,17 @@ remote func request_game_start():
 		rpc("start_game")
 	else:
 		output_text("not all players are ready...")
+
+remote func request_placeable(placeable_id,pos):
+	var request_id = get_tree().get_rpc_sender_id()
+	output_text(str(request_id) + " request placeable " + str(placeable_id))
+	var placeable_info = {
+		placeable_owner=request_id,
+		placeable_id=placeable_id,
+		placeable_index=synced_placeables_index,
+		pos=pos
+	}
+	synced_placeables[synced_placeables_index] = placeable_info
+	rpc("server_placeable",placeable_info,synced_placeables)
+	synced_placeables_index = synced_placeables_index + 1
+
