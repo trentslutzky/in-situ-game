@@ -5,11 +5,15 @@ var DEFAULT_PORT = 28960
 var DEFAULT_MAX_PLAYERS = 4
 
 var players = {}
+var players_initialized = {}
 
-var synced_placeables = {}
-var synced_placeables_index = 0
+var game_start = false
+
+onready var timer = Timer.new()
 
 func _ready():
+	add_child(timer)
+	timer.start()
 	var ip_addresses = IP.get_local_addresses()
 	for ip in ip_addresses:
 		if ip.begins_with("192.168.") and not ip.ends_with(".1"):
@@ -19,6 +23,11 @@ func _ready():
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	
 	StartServer()
+	timer.connect("timeout",self,"_server_tick")
+	
+func _server_tick():
+	if game_start:
+		rpc("tick")
 	
 func StartServer(port=DEFAULT_PORT,num_players=DEFAULT_MAX_PLAYERS):
 	output_text('Starting server...')
@@ -42,7 +51,8 @@ func _on_start_server_pressed():
 	
 remote func add_player_data(data):
 	output_text('Got request to add player: ' + str(data))
-	var id = get_tree().get_rpc_sender_id()
+	var id = get_tree().get_rpc_sender_id()	
+	players_initialized[id] = false
 	players[id] = data
 	output_text('Added data to players for id ' + str(id))
 	rpc("update_players_list",players)
@@ -55,8 +65,8 @@ remote func player_ready_up():
 		output_text(players[id]['username'] + ' Readied up')
 		rpc("update_players_list",players)
 		
-remote func request_game_start():
-	output_text("start game request recieved")
+remote func request_game_load():
+	output_text("game load request recieved")
 	var num_players = 0
 	var num_players_ready = 0
 	for player in players:
@@ -65,20 +75,22 @@ remote func request_game_start():
 			num_players_ready = num_players_ready + 1
 	if(num_players == num_players_ready):
 		output_text("All players ready. Instructing clients to load map.")
-		rpc("start_game")
+		rpc("load_game")
 	else:
 		output_text("not all players are ready...")
-
-remote func request_placeable(placeable_id,pos):
+	
+remote func initialize_client():
 	var request_id = get_tree().get_rpc_sender_id()
-	output_text(str(request_id) + " request placeable " + str(placeable_id))
-	var placeable_info = {
-		placeable_owner=request_id,
-		placeable_id=placeable_id,
-		placeable_index=synced_placeables_index,
-		pos=pos
-	}
-	synced_placeables[synced_placeables_index] = placeable_info
-	rpc("server_placeable",placeable_info,synced_placeables)
-	synced_placeables_index = synced_placeables_index + 1
-
+	players_initialized[request_id] = true
+	var num_players = players_initialized.size()
+	var num_players_initialized = 0
+	for player in players_initialized:
+		if players_initialized[player] == true:
+			num_players_initialized = num_players_initialized + 1
+	if(num_players == num_players_initialized):
+		# start game
+		rpc("start_game")
+		game_start = true
+	
+	
+		

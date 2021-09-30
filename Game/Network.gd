@@ -56,16 +56,17 @@ remote func update_players_list(new_players):
 func ready_up():
 	rpc_id(1,"player_ready_up")
 	
-func request_game_start():
-	rpc_id(1,"request_game_start")
+func request_game_load():
+	rpc_id(1,"request_game_load")
 	
-func request_placeable(placeable_id,pos):
-	rpc_id(1,"request_placeable",placeable_id,pos)
-	
-remote func start_game():
+remote func load_game():
 	get_tree().change_scene("res://Maps/TestMap.tscn")
+
+func initialize_clinet():
+	rpc_id(1,"initialize_client")
+
+remote func start_game():
+	get_node("/root/Game").start_game()
 	
-remote func server_placeable(placeable_info,new_synced_placeables):
-	synced_placeables = new_synced_placeables
-	print("sever_placeable")
-	get_node("/root/Map").remote_placeable(placeable_info)
+remote func tick():
+	get_node("/root/Game").tick()

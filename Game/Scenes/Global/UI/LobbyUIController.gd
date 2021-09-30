@@ -86,4 +86,4 @@ func _on_ready_up_button_pressed():
 	Network.ready_up()
 
 func _on_start_game_button_pressed():
-	Network.request_game_start()
+	Network.request_game_load()

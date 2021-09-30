@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Sprites/sprites/blocks/drills/mechanical-drill.png" type="Texture" id=1]
+[ext_resource path="res://Sprites/sprites/blocks/drills/mechanical-drill-top.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/sprites/blocks/drills/mechanical-drill-rotator.png" type="Texture" id=3]
+
+[node name="Extractor" type="Node2D"]
+
+[node name="Graphics" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Graphics"]
+position = Vector2( 32, 32 )
+texture = ExtResource( 1 )
+
+[node name="Sprite2" type="Sprite" parent="Graphics"]
+position = Vector2( 32, 32 )
+texture = ExtResource( 3 )
+
+[node name="Sprite3" type="Sprite" parent="Graphics"]
+position = Vector2( 32, 32 )
+texture = ExtResource( 2 )
