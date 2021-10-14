@@ -9,9 +9,10 @@ var mouse_in = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var items = GOManager.preload_game_object_names
+	var items = GOManager.gameobject_data
 	for item in items:
-		item_list.add_item(item,null,true)
+		print(item)
+		item_list.add_item(item['title'],load(item['sprite']),true)
 
 func _on_ItemList_item_selected(index):
 	InputManager.is_placing = true

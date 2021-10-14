@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Sprites/Animated_Basic_Conveyor.tres" type="Texture" id=1]
+[ext_resource path="res://Scenes/Structures/Belt.gd" type="Script" id=2]
+[ext_resource path="res://Sprites/Animated_Basic_Conveyor_Corner.tres" type="Texture" id=3]
+[ext_resource path="res://Sprites/icon.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/Structures/BeltPathFollow.gd" type="Script" id=5]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -15.866, 0.11754 )
+}
+
+[node name="belt" type="Node2D"]
+z_index = 2
+script = ExtResource( 2 )
+
+[node name="graphics" type="Node2D" parent="."]
+z_index = -1
+
+[node name="fwd_sprite" type="Sprite" parent="graphics"]
+texture = ExtResource( 1 )
+
+[node name="left_sprite" type="Sprite" parent="graphics"]
+visible = false
+texture = ExtResource( 3 )
+
+[node name="right_sprite" type="Sprite" parent="graphics"]
+visible = false
+scale = Vector2( 1, -1 )
+texture = ExtResource( 3 )
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource( 1 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+rotate = false
+loop = false
+lookahead = 1.0
+script = ExtResource( 5 )
+
+[node name="Sprite" type="Sprite" parent="Path2D/PathFollow2D"]
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 4 )
+
+[node name="parent_point_back" type="Node2D" parent="."]
+position = Vector2( -32, 0 )
+
+[node name="parent_point_left" type="Node2D" parent="."]
+position = Vector2( 0, -32 )
+
+[node name="parent_point_right" type="Node2D" parent="."]
+position = Vector2( 0, 32 )
+
+[node name="child_point" type="Node2D" parent="."]
+position = Vector2( 32, 0 )

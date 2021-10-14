@@ -17,6 +17,8 @@ func _ready():
 	for ip in ip_addresses:
 		if ip.begins_with("192.168.") and not ip.ends_with(".1"):
 			DEFAULT_IP_ADDRESS = ip
+		else:
+			DEFAULT_IP_ADDRESS = '127.0.0.1'
 	
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")

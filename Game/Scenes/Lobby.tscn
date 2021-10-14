@@ -112,7 +112,6 @@ __meta__ = {
 }
 
 [node name="client_layer" type="Control" parent="Lobby UI"]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
@@ -135,6 +134,7 @@ __meta__ = {
 }
 
 [node name="back_button" type="Button" parent="Lobby UI/client_layer"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -219,6 +219,7 @@ __meta__ = {
 }
 
 [node name="lobby_layer" type="Control" parent="Lobby UI"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {

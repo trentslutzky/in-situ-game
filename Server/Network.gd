@@ -40,8 +40,13 @@ func _player_connected(id):
 	output_text('Client ' + str(id) + ' connected')
 
 func _player_disconnected(id):
-	output_text('Client ' + str(id) + ' disconnected.')
+	output_text('Client ' + str(id) + ' disconnected')
 	players.erase(id)
+	if(players.size() == 0):
+		print("All players left. Restarting server...")
+		game_start = false
+		get_node("/root/Game/GameObjects").restart_game()
+		
 
 func output_text(text):
 	print(text)
@@ -91,6 +96,3 @@ remote func initialize_client():
 		# start game
 		rpc("start_game")
 		game_start = true
-	
-	
-		

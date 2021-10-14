@@ -8,11 +8,9 @@ extents = Vector2( 15.875, 15.9125 )
 [node name="Placeable" type="Node2D"]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2( 16, 16 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 16, 16 )
 texture = ExtResource( 1 )
